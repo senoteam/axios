@@ -1,4 +1,4 @@
-// Axios v1.4.0 Copyright (c) 2023 Matt Zabriskie and contributors
+// Axios v1.0.0 Copyright (c) 2023 Matt Zabriskie and contributors
 'use strict';
 
 const FormData$1 = require('form-data');
@@ -1961,7 +1961,7 @@ function buildFullPath(baseURL, requestedURL) {
   return requestedURL;
 }
 
-const VERSION = "1.4.0";
+const VERSION = "1.0.0";
 
 function parseProtocol(url) {
   const match = /^([-+\w]{1,25})(:?\/\/|:)/.exec(url);
@@ -2536,7 +2536,7 @@ function setProxy(options, configProxy, location) {
   };
 }
 
-const isHttpAdapterSupported = typeof process !== 'undefined' && utils.kindOf(process) === 'process';
+typeof process !== 'undefined' && utils.kindOf(process) === 'process';
 
 // temporary hotfix
 
@@ -2565,8 +2565,7 @@ const wrapAsync = (asyncExecutor) => {
   })
 };
 
-/*eslint consistent-return:0*/
-const httpAdapter = isHttpAdapterSupported && function httpAdapter(config) {
+function httpAdapter(config) {
   return wrapAsync(async function dispatchHttpRequest(resolve, reject, onDone) {
     let {data, lookup, family} = config;
     const {responseType, responseEncoding} = config;
@@ -3080,7 +3079,7 @@ const httpAdapter = isHttpAdapterSupported && function httpAdapter(config) {
       req.end(data);
     }
   });
-};
+}
 
 const cookies = platform.isStandardBrowserEnv ?
 
@@ -3222,9 +3221,7 @@ function progressEventReducer(listener, isDownloadStream) {
   };
 }
 
-const isXHRAdapterSupported = typeof XMLHttpRequest !== 'undefined';
-
-const xhrAdapter = isXHRAdapterSupported && function (config) {
+function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
     let requestData = config.data;
     const requestHeaders = AxiosHeaders$1.from(config.headers).normalize();
@@ -3429,11 +3426,14 @@ const xhrAdapter = isXHRAdapterSupported && function (config) {
     // Send the request
     request.send(requestData || null);
   });
-};
+}
+
+const isHttpAdapterSupported = typeof process !== 'undefined' && utils.kindOf(process) === 'process';
+const isXHRAdapterSupported = typeof XMLHttpRequest !== 'undefined';
 
 const knownAdapters = {
-  http: httpAdapter,
-  xhr: xhrAdapter
+  http: isHttpAdapterSupported && httpAdapter,
+  xhr: isXHRAdapterSupported && xhrAdapter
 };
 
 utils.forEach(knownAdapters, (fn, value) => {
