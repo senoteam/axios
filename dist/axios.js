@@ -1,4 +1,4 @@
-// Axios v1.0.1 Copyright (c) 2023 Matt Zabriskie and contributors
+// Axios v1.0.2 Copyright (c) 2023 Matt Zabriskie and contributors
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
@@ -2052,8 +2052,7 @@
       listener(data);
     };
   }
-  var isXHRAdapterSupported = typeof XMLHttpRequest !== 'undefined';
-  var xhrAdapter = isXHRAdapterSupported && function xhrAdapter(config) {
+  function xhrAdapter(config) {
     return new Promise(function dispatchXhrRequest(resolve, reject) {
       var requestData = config.data;
       var requestHeaders = AxiosHeaders$1.from(config.headers).normalize();
@@ -2236,11 +2235,13 @@
       // Send the request
       request.send(requestData || null);
     });
-  };
+  }
 
+  var isHttpAdapterSupported = typeof process !== 'undefined' && utils.kindOf(process) === 'process';
+  var isXHRAdapterSupported = typeof XMLHttpRequest !== 'undefined';
   var knownAdapters = {
-    http: httpAdapter,
-    xhr: xhrAdapter
+    http: isHttpAdapterSupported && httpAdapter,
+    xhr: isXHRAdapterSupported && xhrAdapter
   };
   utils.forEach(knownAdapters, function (fn, value) {
     if (fn) {
@@ -2440,7 +2441,7 @@
     return config;
   }
 
-  var VERSION = "1.0.1";
+  var VERSION = "1.0.2";
 
   var validators$1 = {};
 
