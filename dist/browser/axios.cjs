@@ -1,4 +1,4 @@
-// Axios v1.0.0 Copyright (c) 2023 Matt Zabriskie and contributors
+// Axios v1.0.1 Copyright (c) 2023 Matt Zabriskie and contributors
 'use strict';
 
 function bind(fn, thisArg) {
@@ -2193,7 +2193,9 @@ function progressEventReducer(listener, isDownloadStream) {
   };
 }
 
-function xhrAdapter(config) {
+const isXHRAdapterSupported = typeof XMLHttpRequest !== 'undefined';
+
+var xhrAdapter = isXHRAdapterSupported && function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
     let requestData = config.data;
     const requestHeaders = AxiosHeaders$1.from(config.headers).normalize();
@@ -2398,14 +2400,11 @@ function xhrAdapter(config) {
     // Send the request
     request.send(requestData || null);
   });
-}
-
-const isHttpAdapterSupported = typeof process !== 'undefined' && utils.kindOf(process) === 'process';
-const isXHRAdapterSupported = typeof XMLHttpRequest !== 'undefined';
+};
 
 const knownAdapters = {
-  http: isHttpAdapterSupported && httpAdapter,
-  xhr: isXHRAdapterSupported && xhrAdapter
+  http: httpAdapter,
+  xhr: xhrAdapter
 };
 
 utils.forEach(knownAdapters, (fn, value) => {
@@ -2632,7 +2631,7 @@ function mergeConfig(config1, config2) {
   return config;
 }
 
-const VERSION = "1.0.0";
+const VERSION = "1.0.1";
 
 const validators$1 = {};
 
