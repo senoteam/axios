@@ -1,4 +1,4 @@
-// Axios v1.0.2 Copyright (c) 2023 Matt Zabriskie and contributors
+// Axios v1.0.3 Copyright (c) 2023 Matt Zabriskie and contributors
 'use strict';
 
 const FormData$1 = require('form-data');
@@ -1961,7 +1961,7 @@ function buildFullPath(baseURL, requestedURL) {
   return requestedURL;
 }
 
-const VERSION = "1.0.2";
+const VERSION = "1.0.3";
 
 function parseProtocol(url) {
   const match = /^([-+\w]{1,25})(:?\/\/|:)/.exec(url);
@@ -2497,7 +2497,7 @@ function setProxy(options, configProxy, location) {
   if (!proxy && proxy !== false) {
     const proxyUrl = proxyFromEnv.getProxyForUrl(location);
     if (proxyUrl) {
-      proxy = new URL(proxyUrl);
+      proxy = new url.URL(proxyUrl);
     }
   }
   if (proxy) {
@@ -2623,7 +2623,7 @@ function httpAdapter(config) {
 
     // Parse url
     const fullPath = buildFullPath(config.baseURL, config.url);
-    const parsed = new URL(fullPath, 'http://localhost');
+    const parsed = new url.URL(fullPath, 'http://localhost');
     const protocol = parsed.protocol || supportedProtocols[0];
 
     if (protocol === 'data:') {
